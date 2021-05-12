@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+    bind:
+        environment:
+            - WEBMIN_ENABLED=true
+            - WEBMIN_INIT_SSL_ENABLED=false
+            - WEBMIN_INIT_REFERERS=opendns1.domain.com
+            - WEBMIN_INIT_REDIRECT_PORT=10000
+            - ROOT_PASSWORD=password
+            - TZ=Eastern Standard Time

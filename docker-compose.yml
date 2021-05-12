@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+    bind:
+        container_name: bind9
+        hostname: bind9
+        network_mode: bridge
+        image: jessenich91/bind9
+        build: 
+            context: .
+            dockerfile: Dockerfile
+            labels:
+                - com.keplerdev.name: "Bind v9 Authoritate DNS Server"
+                - com.keplerdev.description: "Running Debian 10 preconfigured for single domain use, failovers, and upstream caching."
+                - com.keplerdev.distro-name: "focal"
+                - com.keplerdev.distro-friendly: "Ubuntu 20.04"
+        restart: unless-stopped
+        ports:
+            - "53:53/tcp"
+            - "53:53/udp"
+            - 10000:10000/tcp
+        volumes:
+            - data:/data
+        environment:
+            - WEBMIN_ENABLED=true
+            - WEBMIN_INIT_SSL_ENABLED=false
+            - WEBMIN_INIT_REFERERS=dns.domain.com
+            - WEBMIN_INIT_REDIRECT_PORT=10000
+            - ROOT_PASSWORD=password
+            - TZ=Eastern Standard Time
