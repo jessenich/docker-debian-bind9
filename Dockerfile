@@ -3,7 +3,7 @@ FROM ubuntu:focal AS conf-repos
 RUN apt-get update \
     && apt-get upgrade -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg \
-    && apt-key adv --fetch-keys http://www.webmin.com/jcameron-key.asc >>  \
+    && apt-key adv --fetch-keys http://www.webmin.com/jcameron-key.asc \
     && echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list;
 
 RUN echo "root content: " \
