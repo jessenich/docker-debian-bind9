@@ -8,9 +8,9 @@ RUN apt-get update \
 
 RUN echo "root content: " \
     && ls / \
-    && echo "var content" \
+    && echo "etc content" \
     && ls /etc \
-    && echo "var/apt contents" \
+    && echo "etc/apt contents" \
     && ls /etc/apt
 
 FROM ubuntu:focal
