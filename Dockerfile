@@ -1,4 +1,7 @@
-FROM ubuntu:focal AS conf-repos
+FROM debian:latest AS conf-repos
+
+LABEL maintainer="Jesse N. <jesse@keplerdev.com>" \
+      org.opencontainers.image.source=https://github.com/jessenich/docker-debian-bind9
 
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -15,8 +18,6 @@ RUN echo "root content: " \
 
 FROM ubuntu:focal
 
-LABEL maintainer="Jesse N. <https://github.com/jessenich> <https://linkedin.com/jessenich> <jesse@keplerdev.com>"
-
 ENV BIND_USER=bind \
     BIND_VERSION=9.11.3 \
     WEBMIN_VERSION=1.941 \
@@ -29,14 +30,17 @@ COPY --from=conf-repos /etc/apt/sources.list /etc/apt/sources.list
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
-RUN rm -rf /etc/apt/apt.conf.d/docker-gzip-indexes \
- && apt-get update \
- && apt-get upgrade -y \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      tzdata \
-      bind9=1:${BIND_VERSION}* bind9-host=1:${BIND_VERSION}* dnsutils \
-      webmin=${WEBMIN_VERSION}* \
- && rm -rf /var/lib/apt/lists/*
+RUN rm -rf /etc/apt/apt.conf.d/docker-gzip-indexes &&  \
+    apt-get update && \
+    apt-get upgrade -y && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends && \
+        tzdata \
+        bind9 \
+        bind9-dnsutils \
+        bind9-host \
+        bind9-utils \
+        webmin && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /sbin/entrypoint.sh
 
